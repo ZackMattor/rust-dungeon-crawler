@@ -1,5 +1,5 @@
 [package]
-name = "rust-playground"
+name = "rust-dungeon-crawler"
 version = "0.1.0"
 authors = ["Zachary Mattor <zmattor@gmail.com>"]
 edition = "2018"
