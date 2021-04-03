@@ -51,7 +51,7 @@ impl From<&String> for Map {
             y: 0,
         };
 
-        for (_i, c) in str_data.chars().enumerate() {
+        for c in str_data.chars() {
             match c {
                 '#' => {
                     data.last_mut().unwrap().push(TileType::Wall);
