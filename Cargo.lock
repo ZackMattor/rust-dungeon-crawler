@@ -70,7 +70,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-playground"
+name = "rust-dungeon-crawler"
 version = "0.1.0"
 dependencies = [
  "rand 0.5.6 (registry+https://github.com/rust-lang/crates.io-index)",

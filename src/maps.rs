@@ -13,21 +13,18 @@ pub struct Point {
 }
 
 pub struct Map {
-    name: String,
     player_start: Point,
     data: Vec<Vec<TileType>>,
 }
 
 impl Map {
-    pub fn load(name: String, path: String) -> Map {
+    pub fn load_file(path: String) -> Self {
         let data = fs::read_to_string(path).expect("Failed to load map");
 
-        Self::from_string(data, name)
+        Self::from(&data)
     }
 
     pub fn debug_render(&self) {
-        println!("Map Name: {}", self.name);
-
         for (y, row) in self.data.iter().enumerate() {
             for (x, col) in row.iter().enumerate() {
                 if self.player_start == ( Point { x: x as i32, y: y as i32 } ) {
@@ -44,8 +41,10 @@ impl Map {
             print!("\n");
         }
     }
+}
 
-    fn from_string(str_data: String, name: String) -> Map {
+impl From<&String> for Map {
+    fn from(str_data: &String) -> Self {
         let mut data : Vec<Vec<TileType>> = vec![vec![]];
         let mut player_start = Point {
             x: 0,
@@ -77,8 +76,7 @@ impl Map {
             }
         }
 
-        Map {
-            name: name,
+        Self {
             data,
             player_start,
         }
