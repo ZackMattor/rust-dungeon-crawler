@@ -6,15 +6,15 @@ pub enum TileType {
     Unknown,
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct Point {
-    x: i32,
-    y: i32,
+    pub x: i32,
+    pub y: i32,
 }
 
 pub struct Map {
-    player_start: Point,
-    data: Vec<Vec<TileType>>,
+    pub player_start: Point,
+    pub data: Vec<Vec<TileType>>,
 }
 
 impl Map {
