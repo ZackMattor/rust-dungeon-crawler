@@ -1,5 +1,6 @@
 use std::fs;
 
+#[derive(PartialEq, Eq)]
 pub enum TileType {
     Wall,
     Floor,
@@ -10,6 +11,16 @@ pub enum TileType {
 pub struct Point {
     pub x: i32,
     pub y: i32,
+}
+
+impl ::core::ops::Add for Point {
+    type Output = Point;
+    fn add(self, rhs: Point) -> Point {
+        Point {
+            x: self.x.add(rhs.x),
+            y: self.y.add(rhs.y),
+        }
+    }
 }
 
 pub struct Map {

@@ -1,11 +1,11 @@
 extern crate termion;
 
+use std::io::{stdin, stdout, Write};
+use std::sync::mpsc;
+use std::{thread, time};
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
-use std::sync::mpsc;
-use std::io::{Write, stdout, stdin};
-use std::{thread, time};
 
 pub enum Command {
     MoveUp,
@@ -16,7 +16,7 @@ pub enum Command {
     Unknown,
 }
 
-pub struct Controls { }
+pub struct Controls {}
 
 impl Controls {
     pub fn start() -> mpsc::Receiver<Command> {

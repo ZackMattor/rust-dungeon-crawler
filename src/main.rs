@@ -1,25 +1,29 @@
 mod maps;
 mod player_input;
 
-use termion::raw::IntoRawMode;
-use std::io::{Write, stdout, stdin};
-use std::{thread, time};
 use maps::{Map, Point, TileType};
 use player_input::{Command, Controls};
+use std::io::{stdin, stdout, Write};
+use std::{thread, time};
+use termion::raw::IntoRawMode;
 
-const loop_sleep_interval: time::Duration = time::Duration::from_millis(10);
+const loop_sleep_interval: time::Duration = time::Duration::from_millis(25);
 
 fn render(map: &Map, player_location: &Point) {
     let mut stdout = stdout().into_raw_mode().unwrap();
+    print!("{}", termion::clear::All);
+
     for (y, row) in map.data.iter().enumerate() {
         for (x, col) in row.iter().enumerate() {
-            if map.player_start
-                == (Point {
+            print!("{}", termion::cursor::Goto(x as u16 + 1, y as u16 + 1));
+
+            if player_location
+                == &(Point {
                     x: x as i32,
                     y: y as i32,
                 })
             {
-                print!(".");
+                print!("☺");
             } else {
                 match col {
                     TileType::Wall => print!("#"),
@@ -35,7 +39,7 @@ fn render(map: &Map, player_location: &Point) {
 
 fn main() {
     let map = Map::load_file("src/maps/home.map".to_string());
-    let player_location = map.player_start.clone();
+    let mut player_location = map.player_start.clone();
 
     let rx = Controls::start();
 
@@ -43,13 +47,19 @@ fn main() {
         render(&map, &player_location);
         let received = rx.try_recv().unwrap_or(Command::Unknown);
 
-        match received {
+        let movement_vector = match received {
+            Command::MoveUp => Point { x: 0, y: -1 },
+            Command::MoveLeft => Point { x: -1, y: 0 },
+            Command::MoveDown => Point { x: 0, y: 1 },
+            Command::MoveRight => Point { x: 1, y: 0 },
+            Command::Unknown => Point { x: 0, y: 0 },
             Command::Exit => break,
-            Command::MoveUp => println!("Up"),
-            Command::MoveLeft => println!("Left"),
-            Command::MoveDown => println!("Down"),
-            Command::MoveRight => println!("Right"),
-            Command::Unknown => {},
+        };
+
+        let tmp_location = player_location.clone() + movement_vector.clone();
+
+        if map.data[tmp_location.y as usize][tmp_location.x as usize] == TileType::Floor {
+            player_location = player_location + movement_vector;
         }
 
         thread::sleep(loop_sleep_interval);
