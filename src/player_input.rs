@@ -1,8 +1,8 @@
 extern crate termion;
 
-use std::io::{stdin, stdout, Write};
+use std::io::{stdin, stdout};
 use std::sync::mpsc;
-use std::{thread, time};
+use std::thread;
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
@@ -23,7 +23,7 @@ impl Controls {
         let (sender, receiver) = mpsc::channel();
 
         thread::spawn(move || {
-            let mut controls: Controls = Controls {};
+            let controls: Controls = Controls {};
             controls.input_loop(sender);
         });
 
@@ -31,7 +31,7 @@ impl Controls {
     }
 
     fn input_loop(&self, sender: mpsc::Sender<Command>) {
-        let mut stdout = stdout().into_raw_mode().unwrap();
+        stdout().into_raw_mode().unwrap();
         let stdin = stdin();
 
         // Start the input loop

@@ -3,14 +3,14 @@ mod player_input;
 
 use maps::{Map, Point, TileType};
 use player_input::{Command, Controls};
-use std::io::{stdin, stdout, Write};
 use std::{thread, time};
-use termion::raw::IntoRawMode;
+//use termion::raw::IntoRawMode;
+//use std::io::stdout;
 
-const loop_sleep_interval: time::Duration = time::Duration::from_millis(25);
+const LOOP_SLEEP_INTERVAL: time::Duration = time::Duration::from_millis(25);
 
 fn render(map: &Map, player_location: &Point) {
-    let mut stdout = stdout().into_raw_mode().unwrap();
+    //let stdout = stdout().into_raw_mode().unwrap();
     print!("{}", termion::clear::All);
 
     for (y, row) in map.data.iter().enumerate() {
@@ -62,6 +62,6 @@ fn main() {
             player_location = player_location + movement_vector;
         }
 
-        thread::sleep(loop_sleep_interval);
+        thread::sleep(LOOP_SLEEP_INTERVAL);
     }
 }
